@@ -6,6 +6,7 @@
 import os
 import requests
 import time
+import urllib.robotparser
 
 conf = 'CVPR2021'
 header = 'http://openaccess.thecvf.com/'
@@ -17,9 +18,29 @@ def name_check(name):
     name = name.replace('/',' or ')
     return name
 
+
+def get_crawl_delay_sec(url, fetch_url):
+    crawl_delay_sec = -1
+    rp = urllib.robotparser.RobotFileParser()
+    robots_url = url + 'robots.txt'
+    rp.set_url(robots_url)
+    rp.read()
+    can_fetch = rp.can_fetch('*', fetch_url)
+    if can_fetch:
+        crawl_delay = rp.crawl_delay("*")
+        if crawl_delay is None:
+            crawl_delay_sec = 15
+        else:
+            crawl_delay_sec = crawl_delay
+    return crawl_delay_sec
+
+
 def main():
     if not os.path.exists(conf):
         os.mkdir(conf)
+    crawl_delay_sec = get_crawl_delay_sec(header, header + conf)
+    if crawl_delay_sec == -1:
+        exit()
     r = requests.get(header+conf,
                      headers={'User-Agent': 'AutoDownloadCVPR2021'},
                      params={'day': 'all'})
@@ -39,7 +60,7 @@ def main():
                     f = open(pdfname, 'wb')
                     f.write(r.content)
                     f.close()
-                    time.sleep(1)
+                    time.sleep(crawl_delay_sec)
 
 if __name__ == '__main__':
     main()        
