@@ -42,10 +42,12 @@ def get_crawl_delay_sec(url: str, fetch_url: str) -> int:
 
 
 def validate_filename(name: str) -> str:
-    return re.sub(r'[\\:*?"<>|]+', '', name).replace('/', ' or ')
+    filename = re.sub(r'[\\:*?"<>|]+', '', name)
+    filename = filename.replace('/', ' or ')
+    return filename
 
 
-def get_pdf_filename_list_from(soup):
+def get_pdf_filename_list_from(soup: BeautifulSoup):
     pdf_filename_list = []
     dt_items = soup.find_all('dt', {'class': 'ptitle'})
     for dt_item in dt_items:
@@ -57,7 +59,9 @@ def get_pdf_filename_list_from(soup):
 
 def get_pdf_url_list_from(soup: BeautifulSoup) -> List:
     a_pdf_items = soup.find_all('a', text='pdf')
-    return [BASE_URL.strip('/') + a_pdf_item.get('href') for a_pdf_item in a_pdf_items]
+    base_url = BASE_URL.strip('/')
+    pdf_url_list = [base_url + a_pdf_item.get('href') for a_pdf_item in a_pdf_items]
+    return pdf_url_list
 
 
 def get_pdf_list() -> List:
@@ -68,7 +72,8 @@ def get_pdf_list() -> List:
     soup = BeautifulSoup(r.text, 'html.parser')
     pdf_filename_list = get_pdf_filename_list_from(soup)
     pdf_url_list = get_pdf_url_list_from(soup)
-    return list(zip(pdf_filename_list, pdf_url_list))
+    pdf_list = list(zip(pdf_filename_list, pdf_url_list))
+    return pdf_list
 
 
 def print_pdf_list(pdf_list: List) -> None:
