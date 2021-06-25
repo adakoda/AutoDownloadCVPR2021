@@ -20,9 +20,10 @@ from tqdm import tqdm
 YEAR = '2021'
 
 CONF_NAME = 'CVPR' + YEAR
-APP_NAME = 'AutoDownload' + CONF_NAME
+CONTACT_URL = 'https://github.com/adakoda/AutoDownloadCVPR' + YEAR
+APP_NAME = 'AutoDownload' + CONF_NAME + '/1.0 (' + CONTACT_URL + ')'
 BASE_URL = 'http://openaccess.thecvf.com/'
-CRAWL_DELAY_SEC = 15
+CRAWL_DELAY_SEC = 15  # PLEASE DON'T MODIFY
 
 
 def get_crawl_delay_sec(url: str, fetch_url: str) -> int:
