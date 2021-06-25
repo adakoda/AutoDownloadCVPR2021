@@ -20,7 +20,9 @@ def name_check(name):
 def main():
     if not os.path.exists(conf):
         os.mkdir(conf)
-    r = requests.get(header+conf, params={'day': 'all'})
+    r = requests.get(header+conf,
+                     headers={'User-Agent': 'AutoDownloadCVPR2021'},
+                     params={'day': 'all'})
     txt = r.text
     lines = txt.split('\n')
     cnt = 0
