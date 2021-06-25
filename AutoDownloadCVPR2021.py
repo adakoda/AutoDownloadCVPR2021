@@ -5,6 +5,7 @@
 
 import os
 import requests
+import time
 
 conf = 'CVPR2021'
 header = 'http://openaccess.thecvf.com/'
@@ -36,6 +37,7 @@ def main():
                     f = open(pdfname, 'wb')
                     f.write(r.content)
                     f.close()
+                    time.sleep(1)
 
 if __name__ == '__main__':
     main()        
